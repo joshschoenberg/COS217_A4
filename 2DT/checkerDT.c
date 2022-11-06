@@ -74,15 +74,18 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
 
          /* if recurring down one subtree results in a failed check
             farther down, passes the failure back up immediately */
-         if(!CheckerDT_treeCheck(oNChild))
+         if(!CheckerDT_treeCheck(oNChild, 0))
             return FALSE;
       }
    }
 
-   if (checkerCount != ulCount)
+   if (ulCount)
    {
-      fprintf(stderr, "checkerCount does not match stored count value\n");
-      return FALSE;
+      if (checkerCount != ulCount)
+      {
+         fprintf(stderr, "checkerCount does not match stored count value\n");
+         return FALSE;
+      }
    }
 
    return TRUE;
