@@ -88,6 +88,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
              checkerCount, ulCount);
          return FALSE;
       }
+      checkerCount = 0;
    }
 
    return TRUE;
