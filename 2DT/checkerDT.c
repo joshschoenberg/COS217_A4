@@ -52,14 +52,14 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
    size_t ulIndex;
    static size_t checkerCount = 0;
-
+   checkerCount++;
    if(oNNode!= NULL) {
 
       /* Sample check on each node: node must be valid */
       /* If not, pass that failure back up immediately */
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
-      checkerCount++;
+      
 
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
