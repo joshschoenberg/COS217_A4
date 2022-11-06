@@ -51,7 +51,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 */
 static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
    size_t ulIndex;
-   size_t checkerCount = 0;
+   static size_t checkerCount = 0;
 
    if(oNNode!= NULL) {
 
