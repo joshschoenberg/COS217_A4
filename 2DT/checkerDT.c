@@ -10,13 +10,18 @@
 #include "dynarray.h"
 #include "path.h"
 
-
+/* s_g_checkerCount keeps track of number of nodes */
+static size_t s_g_checkerCount = 0;
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
+
+
+   s_g_checkerCount++;
+
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -85,14 +90,52 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
 
+
+   s_g_checkerCount
+
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
    if(!bIsInitialized)
+   {
       if(ulCount != 0) {
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
+      /* Similarly, if DT is not initialized, root should be NULL */
+      if(oNRoot != NULL)
+      {
+         fprintf(stderr, "Not initialized, but root is not NULL\n");
+         return FALSE;
+      }
+      return TRUE;
+   }
+   else
+   {
+      /* If ulCount > 0, then oNRoot should not be NULL */
+      if(ulCount && oNRoot == NULL) {
+         fprintf(stderr, "Initialized, but ulCount>0 + oNRoot=NULL");
+         return FALSE;
+      }
+      /* If ulCount == 0, then oNRoot should be NULL */
+      else if (!ulCount && oNRoot){
+         fprintf(stderr, "Initialized, but ulcount=0 + oNRoot!=NULL");
+      }
+   }
+
+   
 
    /* Now checks invariants recursively at each node from the root. */
-   return CheckerDT_treeCheck(oNRoot);
+   if (!CheckerDT_treeCheck(oNRoot))
+   {
+      return FALSE;
+   }
+
+   if (ulCount != s_g_checkerCount)
+   {
+      fprintf(stderr, "checkerCount does not match stored count value");
+      return FALSE;
+   }
+
+   return TRUE;
+   
 }
