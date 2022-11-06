@@ -20,6 +20,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPPPath;
    size_t ulDepth;
    size_t i;
+   size_t *pChildID;
    int numberOfEquivalences;
 
    oPNPath = Node_getPath(oNNode);
@@ -46,6 +47,12 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
+   /* The node's parent should have this child as a child */
+   if (!Node_hasChild(oNParent, Node_getPath(oNNode), pChildID)) {
+      fprintf(stderr, "The node's parent does not have it as a child\n");
+      return FALSE;
+   }
+
    /* The root node should not have a parent */
    if (ulDepth == 1 && oNParent != NULL) {
       fprintf(stderr, "The root node has a parent\n");
@@ -67,6 +74,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* Node cannot have the same name as any of its siblings */
+   /* Nodes should be in alphabetical order */
    if (ulDepth > 1) {
       i = 0;
       numberOfEquivalences = 0;
@@ -75,12 +83,20 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          /* fprintf(stdout, "Sibling: %s, com with: %s", Path_getPathname(
             Node_getPath(oNSibling)), Path_getPathname(Node_getPath(oNNode))); */
          if (oNSibling != NULL) {
-            if (!Node_compare(oNNode, oNSibling)) {
+            int siblingComparison;
+            siblingComparison = Node_compare(oNNode, oNSibling);
+            if (!siblingComparison) {
                numberOfEquivalences++;
                if (numberOfEquivalences > 1) {
                   fprintf(stderr, "Two siblings have the same name\n");
                   return FALSE; 
                }
+            }
+            /* Siblings before this node should be earlier lexicographically */
+            /* Siblings after this node should be later lexicographically */
+            if (i < *pChildID == siblingComparison > 0 ) {
+               fprintf(stderr, "Siblings are not in alphabetical order\n");
+               return FALSE;
             }
          }
 
