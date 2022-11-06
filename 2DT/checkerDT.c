@@ -67,18 +67,21 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    /* Node cannot have the same name as any of its siblings */
    i = 0;
+   int numberOfEquivalences = 0;
    while (i < Node_getNumChildren(oNParent)) {
-      int numberOfEquivalences;
-      numberOfEquivalences = 0;
       Node_getChild(oNParent, i, oNSibling);
       if (oNSibling != NULL) {
-         if (Node_compare(oNNode, *oNSibling)) {
+         if (!Node_compare(oNNode, *oNSibling)) {
             numberOfEquivalences++;
             if (numberOfEquivalences > 1) {
                fprintf(stderr, "Two siblings have the same name\n");
                return FALSE; 
             }
          }
+      }
+      else{
+         fprintf(stderr, "Null ret?\n");
+         return FALSE; 
       }
       i++;
    }
