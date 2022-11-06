@@ -95,12 +95,12 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
                }
             }
             /* Siblings before this node should be earlier lexicographically */
-            if ( (childID > i) && (siblingComparison < 0) ) {
+            if ( (childID < i) && (siblingComparison < 0) ) {
                fprintf(stderr, "Siblings are not in alphabetical order\n");
                return FALSE;
             }
             /* Siblings after this node should be later lexicographically */
-            if ( childID < i && siblingComparison > 0) {
+            if ( childID > i && siblingComparison > 0) {
                fprintf(stderr, "Siblings are not in alphabetical order\n");
                return FALSE;
             }
