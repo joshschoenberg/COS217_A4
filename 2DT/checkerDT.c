@@ -63,7 +63,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* Node cannot have the same name as any of its siblings */
-   for (int i = 0; i < Node_getNumChildren(oNParent); i++) {
+   size_t i = 0;
+   while (i < Node_getNumChildren(oNParent)) {
       int numberOfEquivalences;
       numberOfEquivalences = 0;
       Node_getChild(oNParent, i, oNSibling);
@@ -74,7 +75,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
             return FALSE; 
          }
       }
+      i++;
    }
+   
    /* The root node should not contain a forward slash */
    if (ulDepth == 1 && strchr(Node_getPath(oNNode), '/')) {
       return "Root node should not contain a backward slash\n";
