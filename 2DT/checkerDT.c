@@ -15,7 +15,7 @@
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
-   Node_T *oNSibling;
+   Node_T *oNSibling = NULL;
    Path_T oPNPath;
    Path_T oPPPath;
    size_t ulDepth;
@@ -84,7 +84,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* The root node should not contain a backward slash */
-   if (ulDepth == 1 && strchr(Path_getPathname(Path_getPath(oNNode)), '/')) {
+   if (ulDepth == 1 && strchr(Path_getPathname(Node_getPath(oNNode)), '/')) {
       fprintf(stderr, "Root node should not contain a backward slash\n");
       return FALSE;
    }
