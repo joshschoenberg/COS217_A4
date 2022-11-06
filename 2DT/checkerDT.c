@@ -70,7 +70,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       int numberOfEquivalences;
       numberOfEquivalences = 0;
       Node_getChild(oNParent, i, oNSibling);
-      if (Node_compare(oNNode, *oNSibling)) {
+      if (Path_comparePath(oNNode, *oNSibling)) {
          numberOfEquivalences++;
          if (numberOfEquivalences > 1) {
             fprintf(stderr, "Two siblings have the same name\n");
@@ -80,9 +80,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       i++;
    }
 
-   /* The root node should not contain a forward slash */
-   if (ulDepth == 1 && strchr(Node_getPath(oNNode), '/')) {
-      return "Root node should not contain a backward slash\n";
+   /* The root node should not contain a backward slash */
+   if (ulDepth == 1 && strchr(Path_getPathname(oNNode), '/')) {
+      fprintf(stderr, "Root node should not contain a backward slash\n");
       return FALSE;
    }
    
@@ -146,8 +146,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
    }
 
    if (oNRoot && ulCount != Node_getNumChildren + 1) {
-      fprintf(stderr, "Length of the path is not equal to one more than
-                                       the number of children\n");
+      fprintf(stderr, "Length of the path is not equal to one more than the number of children\n");
       return FALSE;
    }
 
