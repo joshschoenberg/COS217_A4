@@ -15,8 +15,11 @@
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
+   Node_T *oNSibling;
    Path_T oPNPath;
    Path_T oPPPath;
+   size_t ulDepth;
+   ulDepth = Path_getDepth(oPNPath);
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -39,6 +42,45 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
+   /* The root node should not have a parent */
+   if (ulDepth == 1 && oNParent != NULL) {
+      fprintf(stderr, "The root node has a parent\n");
+      return FALSE;
+   }
+
+
+   /* If it is not the root, it must have a parent */
+   if (ulDepth > 1 && oNParent == NULL) {
+      fprintf(stderr, "There is a node that does not have a parent\n");
+      return FALSE;
+   }
+
+   /* oPPathshould not equal NULL */
+   oPNPath = Node_getPath(oNNode);
+   if (Node_getPath(oNNode) == NULL) {
+      fprintf(stderr, "There is a node that has a NULL path\n");
+      return FALSE;
+   }
+
+   /* Node cannot have the same name as any of its siblings */
+   for (int i = 0; i < Node_getNumChildren(oNParent); i++) {
+      int numberOfEquivalences;
+      numberOfEquivalences = 0;
+      Node_getChild(oNParent, i, oNSibling);
+      if (Node_compare(oNNode, *oNSibling)) {
+         numberOfEquivalences++;
+         if (numberOfEquivalences > 1) {
+            fprintf(stderr, "Two siblings have the same name\n");
+            return FALSE; 
+         }
+      }
+   }
+   /* The root node should not contain a forward slash */
+   if (ulDepth == 1 && strchr(Node_getPath(oNNode), '/')) {
+      return "Root node should not contain a backward slash\n";
+      return FALSE;
+   }
+   
    return TRUE;
 }
 
@@ -87,12 +129,24 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
-   if(!bIsInitialized)
+   if(!bIsInitialized) {
+      if (oNRoot != NULL) {
+         fprintf(stderr, "Not initialized, but oNRoot is not NULL");
+         return FALSE;
+      }
       if(ulCount != 0) {
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
+   }
+
+   if (oNRoot && ulCount != Node_getNumChildren + 1) {
+      fprintf(stderr, "Length of the path is not equal to one more than
+                                       the number of children\n");
+      return FALSE;
+   }
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(oNRoot);
+  
 }
