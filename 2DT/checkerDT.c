@@ -81,7 +81,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
 
    if (checkerCount != ulCount)
    {
-      fprintf(stderr, "checkerCount does not match stored count value");
+      fprintf(stderr, "checkerCount does not match stored count value\n");
       return FALSE;
    }
 
