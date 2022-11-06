@@ -67,29 +67,30 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* Node cannot have the same name as any of its siblings */
-   i = 0;
-   numberOfEquivalences = 0;
-   while (i < Node_getNumChildren(oNParent)) {
-      Node_getChild(oNParent, i, oNSibling);
-      fprintf(stdout, "Sibling: %s, com with: %s", Path_getPathname(
-         Node_getPath(*oNSibling)), Path_getPathname(Node_getPath(oNNode)));
-      if (oNSibling != NULL) {
-         if (!Node_compare(oNNode, *oNSibling)) {
-            numberOfEquivalences++;
-            if (numberOfEquivalences > 1) {
-               fprintf(stderr, "Two siblings have the same name\n");
-               return FALSE; 
+   if (ulDepth > 1) {
+      i = 0;
+      numberOfEquivalences = 0;
+      while (i < Node_getNumChildren(oNParent)) {
+         Node_getChild(oNParent, i, oNSibling);
+         fprintf(stdout, "Sibling: %s, com with: %s", Path_getPathname(
+            Node_getPath(*oNSibling)), Path_getPathname(Node_getPath(oNNode)));
+         if (oNSibling != NULL) {
+            if (!Node_compare(oNNode, *oNSibling)) {
+               numberOfEquivalences++;
+               if (numberOfEquivalences > 1) {
+                  fprintf(stderr, "Two siblings have the same name\n");
+                  return FALSE; 
+               }
             }
          }
-      }
 
-      else {
-         fprintf(stderr, "Null ret?\n");
-         return FALSE; 
+         else {
+            fprintf(stderr, "Null ret?\n");
+            return FALSE; 
+         }
+         i++;
       }
-      i++;
    }
-
    /* The root node should not contain a backward slash */
    if (ulDepth == 1 && strchr(Path_getPathname(Node_getPath(oNNode)), '/')) {
       fprintf(stderr, "Root node should not contain a backward slash\n");
