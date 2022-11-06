@@ -21,7 +21,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    size_t ulDepth;
    size_t i;
 
-   oPNPath = Path_getPath(oNNode);
+   oPNPath = Node_getPath(oNNode);
    ulDepth = Path_getDepth(oPNPath);
 
    /* Sample check: a NULL pointer is not a valid node */
