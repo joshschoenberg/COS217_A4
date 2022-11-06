@@ -15,7 +15,7 @@
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
-   Node_T *oNSibling = NULL;
+   Node_T oNSibling = NULL;
    Path_T oPNPath;
    Path_T oPPPath;
    size_t ulDepth;
@@ -71,11 +71,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       i = 0;
       numberOfEquivalences = 0;
       while (i < Node_getNumChildren(oNParent)) {
-         Node_getChild(oNParent, i, oNSibling);
+         Node_getChild(oNParent, i, &oNSibling);
          fprintf(stdout, "Sibling: %s, com with: %s", Path_getPathname(
-            Node_getPath(*oNSibling)), Path_getPathname(Node_getPath(oNNode)));
+            Node_getPath(oNSibling)), Path_getPathname(Node_getPath(oNNode)));
          if (oNSibling != NULL) {
-            if (!Node_compare(oNNode, *oNSibling)) {
+            if (!Node_compare(oNNode, oNSibling)) {
                numberOfEquivalences++;
                if (numberOfEquivalences > 1) {
                   fprintf(stderr, "Two siblings have the same name\n");
