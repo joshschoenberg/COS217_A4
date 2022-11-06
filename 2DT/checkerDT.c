@@ -19,6 +19,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPNPath;
    Path_T oPPPath;
    size_t ulDepth;
+   size_t i;
+
    ulDepth = Path_getDepth(oPNPath);
 
    /* Sample check: a NULL pointer is not a valid node */
@@ -63,7 +65,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* Node cannot have the same name as any of its siblings */
-   size_t i = 0;
+   i = 0;
    while (i < Node_getNumChildren(oNParent)) {
       int numberOfEquivalences;
       numberOfEquivalences = 0;
@@ -77,7 +79,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
       i++;
    }
-   
+
    /* The root node should not contain a forward slash */
    if (ulDepth == 1 && strchr(Node_getPath(oNNode), '/')) {
       return "Root node should not contain a backward slash\n";
