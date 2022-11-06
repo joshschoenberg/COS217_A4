@@ -70,7 +70,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       int numberOfEquivalences;
       numberOfEquivalences = 0;
       Node_getChild(oNParent, i, oNSibling);
-      if (Path_comparePath(oNNode, *oNSibling)) {
+      if (Node_compare(oNNode, *oNSibling)) {
          numberOfEquivalences++;
          if (numberOfEquivalences > 1) {
             fprintf(stderr, "Two siblings have the same name\n");
