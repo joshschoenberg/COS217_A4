@@ -20,7 +20,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPPPath;
    size_t ulDepth;
    size_t i;
-   size_t *pChildID;
+   size_t childID = 0;
    int numberOfEquivalences;
 
    oPNPath = Node_getPath(oNNode);
@@ -48,7 +48,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* The node's parent should have this child as a child */
-   if (!Node_hasChild(oNParent, Node_getPath(oNNode), pChildID)) {
+   if (!Node_hasChild(oNParent, Node_getPath(oNNode), &childID)) {
       fprintf(stderr, "The node's parent does not have it as a child\n");
       return FALSE;
    }
@@ -94,7 +94,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
             }
             /* Siblings before this node should be earlier lexicographically */
             /* Siblings after this node should be later lexicographically */
-            if (i < *pChildID == siblingComparison > 0 ) {
+            if ( (i < childID) == (siblingComparison > 0) ) {
                fprintf(stderr, "Siblings are not in alphabetical order\n");
                return FALSE;
             }
