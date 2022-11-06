@@ -21,6 +21,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    size_t ulDepth;
    size_t i;
 
+   oPNPath = Path_getPath(oNNode);
    ulDepth = Path_getDepth(oPNPath);
 
    /* Sample check: a NULL pointer is not a valid node */
@@ -70,18 +71,20 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       int numberOfEquivalences;
       numberOfEquivalences = 0;
       Node_getChild(oNParent, i, oNSibling);
-      if (Node_compare(oNNode, *oNSibling)) {
-         numberOfEquivalences++;
-         if (numberOfEquivalences > 1) {
-            fprintf(stderr, "Two siblings have the same name\n");
-            return FALSE; 
+      if (oNSibling != NULL) {
+         if (Node_compare(oNNode, *oNSibling)) {
+            numberOfEquivalences++;
+            if (numberOfEquivalences > 1) {
+               fprintf(stderr, "Two siblings have the same name\n");
+               return FALSE; 
+            }
          }
       }
       i++;
    }
 
    /* The root node should not contain a backward slash */
-   if (ulDepth == 1 && strchr(Path_getPathname(oNNode), '/')) {
+   if (ulDepth == 1 && strchr(Path_getPathname(Path_getPath(oNNode)), '/')) {
       fprintf(stderr, "Root node should not contain a backward slash\n");
       return FALSE;
    }
@@ -143,11 +146,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
-   }
-
-   if (oNRoot && ulCount != Node_getNumChildren + 1) {
-      fprintf(stderr, "Length of the path is not equal to one more than the number of children\n");
-      return FALSE;
    }
 
    /* Now checks invariants recursively at each node from the root. */
