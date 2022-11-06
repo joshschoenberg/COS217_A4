@@ -20,6 +20,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPPPath;
    size_t ulDepth;
    size_t i;
+   int numberOfEquivalences;
 
    oPNPath = Node_getPath(oNNode);
    ulDepth = Path_getDepth(oPNPath);
@@ -67,7 +68,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    /* Node cannot have the same name as any of its siblings */
    i = 0;
-   int numberOfEquivalences = 0;
+   numberOfEquivalences = 0;
    while (i < Node_getNumChildren(oNParent)) {
       Node_getChild(oNParent, i, oNSibling);
       if (oNSibling != NULL) {
