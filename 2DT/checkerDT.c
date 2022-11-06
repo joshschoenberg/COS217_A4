@@ -10,18 +10,11 @@
 #include "dynarray.h"
 #include "path.h"
 
-/* s_g_checkerCount keeps track of number of nodes */
-static size_t s_g_checkerCount = 0;
-
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Node_T oNParent;
    Path_T oPNPath;
    Path_T oPPPath;
-
-
-   s_g_checkerCount++;
-
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -56,8 +49,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    parameter list to facilitate constructing your checks.
    If you do, you should update this function comment.
 */
-static boolean CheckerDT_treeCheck(Node_T oNNode) {
+static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
    size_t ulIndex;
+   size_t checkerCount = 0;
 
    if(oNNode!= NULL) {
 
@@ -65,6 +59,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
       /* If not, pass that failure back up immediately */
       if(!CheckerDT_Node_isValid(oNNode))
          return FALSE;
+      checkerCount++;
 
       /* Recur on every child of oNNode */
       for(ulIndex = 0; ulIndex < Node_getNumChildren(oNNode); ulIndex++)
@@ -83,6 +78,13 @@ static boolean CheckerDT_treeCheck(Node_T oNNode) {
             return FALSE;
       }
    }
+
+   if (checkerCount != ulCount)
+   {
+      fprintf(stderr, "checkerCount does not match stored count value");
+      return FALSE;
+   }
+
    return TRUE;
 }
 
@@ -121,20 +123,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
    }
 
-   
-
    /* Now checks invariants recursively at each node from the root. */
-   if (!CheckerDT_treeCheck(oNRoot))
-   {
-      return FALSE;
-   }
-
-   if (ulCount != s_g_checkerCount)
-   {
-      fprintf(stderr, "checkerCount does not match stored count value");
-      return FALSE;
-   }
-
-   return TRUE;
+   return CheckerDT_treeCheck(oNRoot, ulCount);
    
 }
