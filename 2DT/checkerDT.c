@@ -25,6 +25,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    oPNPath = Node_getPath(oNNode);
    ulDepth = Path_getDepth(oPNPath);
+   oNParent = Node_getParent(oNNode);
+
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -34,7 +36,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    /* Sample check: parent's path must be the longest possible
       proper prefix of the node's path */
-   oNParent = Node_getParent(oNNode);
    if(oNParent != NULL) {
       oPNPath = Node_getPath(oNNode);
       oPPPath = Node_getPath(oNParent);
@@ -50,10 +51,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    /* The node's parent should have this child as a child */
    if (oNParent != NULL) {
       if (!Node_hasChild(oNParent, Node_getPath(oNNode), &childID)) {
-         fprintf(stderr, "%s", Path_getPathname(Node_getPath(oNParent)));
+         fprintf(stderr, "%s\n%s\n", Path_getPathname(Node_getPath(oNParent)), Path_getPathname(Node_getPath(oNNode)));
          fprintf(stderr, "The node's parent does not have it as a child\n");
          return FALSE;
       }
+      Node_hasChild
    }
 
    /* The root node should not have a parent */
