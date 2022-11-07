@@ -210,7 +210,8 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
 /* see checkerDT.h for specification */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
-
+   char * str;
+   char * nextStr;
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
    if(!bIsInitialized)
@@ -242,8 +243,8 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
 
 
-   char * str = DT_toString();
-   char * nextStr = strchr(str, '\n') + 1;
+   str = DT_toString();
+   nextStr = strchr(str, '\n') + 1;
    while (*nextStr)
    {
       int comparison;
@@ -260,6 +261,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       str = nextStr;
       nextStr = strchr(str, '\n') + 1;
    }
+
    
 
    /* Now checks invariants recursively at each node from the root. */
