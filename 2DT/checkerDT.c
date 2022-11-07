@@ -9,6 +9,7 @@
 #include "checkerDT.h"
 #include "dynarray.h"
 #include "path.h"
+#include "dt.h"
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
@@ -172,7 +173,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
             Node_getChild(oNParent, i, &iNode);
             Node_getChild(oNParent, i-1, &iminus1Node);
 
-            fprintf(stderr, "%s\n%s\n\n", Path_getPathname(Node_getPath(iNode)), Path_getPathname(Node_getPath(iminus1Node)));
+            fprintf(stderr, "%s\n", DT_toString());
 
             if (iNode && iminus1Node)
             {
@@ -188,9 +189,9 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
             i++;
          }
       }
-      
-
    }
+
+   
 
    if (ulCount)
    {
