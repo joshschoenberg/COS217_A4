@@ -51,7 +51,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    /* The node's parent should have this child as a child */
    if (oNParent != NULL) {
       if (!Node_hasChild(oNParent, Node_getPath(oNNode), &childID)) {
-         fprintf(stderr, "%s", Node_getNumChildren(oNParent));
+         fprintf(stderr, "%d", Node_getNumChildren(oNParent));
          fprintf(stderr, "The node's parent does not have it as a child\n");
          return FALSE;
       }
