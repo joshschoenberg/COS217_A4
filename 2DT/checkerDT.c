@@ -82,6 +82,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    /* Node cannot have the same name as any of its siblings */
    /* Nodes should be in alphabetical order */
    if (ulDepth > 1) {
+      oNParent = Node_getParent(oNNode);
       i = 0;
       numberOfEquivalences = 0;
       while (i < Node_getNumChildren(oNParent)) {
