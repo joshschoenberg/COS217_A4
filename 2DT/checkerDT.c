@@ -58,6 +58,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* The root node should not have a parent */
+   oNParent = Node_getParent(oNNode);
    if (ulDepth == 1 && oNParent != NULL) {
       fprintf(stderr, "The root node has a parent\n");
       return FALSE;
@@ -65,6 +66,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
 
    /* If it is not the root, it must have a parent */
+   oNParent = Node_getParent(oNNode);
    if (ulDepth > 1 && oNParent == NULL) {
       fprintf(stderr, "There is a node that does not have a parent\n");
       return FALSE;
