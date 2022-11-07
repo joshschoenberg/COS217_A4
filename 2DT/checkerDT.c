@@ -81,7 +81,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    /* Node cannot have the same name as any of its siblings */
    /* Nodes should be in alphabetical order */
-   if (ulDepth > 1) {
+   if (oNParent != NULL) {
       oNParent = Node_getParent(oNNode);
       i = 0;
       numberOfEquivalences = 0;
@@ -101,12 +101,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
             }
             /* Siblings before this node should be earlier lexicographically */
             else if ( (childID > i) && (siblingComparison < 0) ) {
-               fprintf(stderr, "%s", Node_toString(oNNode));
                fprintf(stderr, "Siblings are not in alphabetical order\n");
                return FALSE;
             }
             /* Siblings after this node should be later lexicographically */
-            else if ( (childID < i) && (siblingComparison < 0) ) {
+            else if ( (childID < i) && (siblingComparison > 0) ) {
                fprintf(stderr, "Siblings are not in alphabetical order\n");
                return FALSE;
             }
