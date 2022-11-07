@@ -102,7 +102,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          {
             int siblingComparison;
             siblingComparison = Node_compare(iNode, iminus1Node);
-            if (siblingComparison > 0)
+            if (siblingComparison < 0)
             {
                fprintf(stderr, "Two siblings in incorrect order\n");
                return FALSE; 
