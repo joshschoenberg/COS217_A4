@@ -12,9 +12,19 @@
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
-   Node_T oNParent;
+   Node_T oNParent = NULL;
+   Node_T oNSibling = NULL;
    Path_T oPNPath;
    Path_T oPPPath;
+   size_t ulDepth;
+   size_t i;
+   int numberOfEquivalences;
+   size_t childID = 0;
+
+   oPNPath = Node_getPath(oNNode);
+   ulDepth = Path_getDepth(oPNPath);
+   oNParent = Node_getParent(oNNode);
+
 
    /* Sample check: a NULL pointer is not a valid node */
    if(oNNode == NULL) {
@@ -24,7 +34,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
    /* Sample check: parent's path must be the longest possible
       proper prefix of the node's path */
-   oNParent = Node_getParent(oNNode);
    if(oNParent != NULL) {
       oPNPath = Node_getPath(oNNode);
       oPPPath = Node_getPath(oNParent);
@@ -37,6 +46,52 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       }
    }
 
+   /* The root node should not have a parent */
+   if (ulDepth == 1 && oNParent != NULL) {
+      fprintf(stderr, "The root node has a parent\n");
+      return FALSE;
+   }
+
+
+   /* If it is not the root, it must have a parent */
+   if (ulDepth > 1 && oNParent == NULL) {
+      fprintf(stderr, "There is a node that does not have a parent\n");
+      return FALSE;
+   }
+
+   /* oPPathshould not equal NULL */
+   if (oPNPath == NULL) {
+      fprintf(stderr, "There is a node that has a NULL path\n");
+      return FALSE;
+   }
+
+   /* Node cannot have the same name as any of its siblings */
+   /* Nodes should be in alphabetical order */
+   if (ulDepth > 1) {
+      i = 0;
+      numberOfEquivalences = 0;
+      while (i < Node_getNumChildren(oNParent)) {
+         Node_getChild(oNParent, i, &oNSibling);
+         if (oNSibling != NULL) {
+            int siblingComparison;
+            siblingComparison = Node_compare(oNNode, oNSibling);
+            if (!siblingComparison) {
+               numberOfEquivalences++;
+               if (numberOfEquivalences > 1) {
+                  fprintf(stderr, "Two siblings have the same name\n");
+                  return FALSE; 
+               }
+            }
+         }
+         i++;
+      }
+   }
+   /* The root node should not contain a backward slash */
+   if (ulDepth == 1 && strchr(Path_getPathname(Node_getPath(oNNode)), '/')) {
+      fprintf(stderr, "Root node should not contain a backward slash\n");
+      return FALSE;
+   }
+   
    return TRUE;
 }
 
@@ -97,16 +152,13 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
 
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
-   if(!bIsInitialized)
-   {
-      if(ulCount != 0) {
-         fprintf(stderr, "Not initialized, but count is not 0\n");
+   if(!bIsInitialized) {
+      if (oNRoot != NULL) {
+         fprintf(stderr, "Not initialized, but oNRoot is not NULL");
          return FALSE;
       }
-      /* Similarly, if DT is not initialized, root should be NULL */
-      if(oNRoot != NULL)
-      {
-         fprintf(stderr, "Not initialized, but root is not NULL\n");
+      if(ulCount != 0) {
+         fprintf(stderr, "Not initialized, but count is not 0\n");
          return FALSE;
       }
       return TRUE;
