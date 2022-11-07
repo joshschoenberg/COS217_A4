@@ -238,13 +238,16 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       /* If ulCount == 0, then oNRoot should be NULL */
       else if (!ulCount && oNRoot){
          fprintf(stderr, "Initialized, but ulcount=0 + oNRoot!=NULL");
+         return FALSE;
       }
    }
 
 
-
+   fprintf(stderr, "%s", DT_toString());
+   fflush(stderr);
    str = DT_toString();
    nextStr = strchr(str, '\n') + 1;
+   
    while (*nextStr)
    {
       int comparison;
@@ -260,7 +263,6 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
       str = nextStr;
       nextStr = strchr(str, '\n') + 1;
-      fprintf(stderr, "%s", nextStr);
    }
 
    
