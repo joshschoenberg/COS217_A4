@@ -14,7 +14,7 @@
 
 /* see checkerDT.h for specification */
 boolean CheckerDT_Node_isValid(Node_T oNNode) {
-   Node_T oNParent;
+   Node_T oNParent = NULL;
    Node_T oNSibling = NULL;
    Path_T oPNPath;
    Path_T oPPPath;
@@ -38,6 +38,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    if(oNParent != NULL) {
       oPNPath = Node_getPath(oNNode);
       oPPPath = Node_getPath(oNParent);
+      oNParent = Node_getParent(oNNode);
 
       if(Path_getSharedPrefixDepth(oPNPath, oPPPath) !=
          Path_getDepth(oPNPath) - 1) {
