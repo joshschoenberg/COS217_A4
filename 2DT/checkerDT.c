@@ -260,6 +260,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
       }
       str = nextStr;
       nextStr = strchr(str, '\n') + 1;
+      fprintf(stderr, "%s", nextStr);
    }
 
    
