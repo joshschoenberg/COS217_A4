@@ -55,7 +55,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          fprintf(stderr, "The node's parent does not have it as a child\n");
          return FALSE;
       }
-      Node_hasChild
    }
 
    /* The root node should not have a parent */
