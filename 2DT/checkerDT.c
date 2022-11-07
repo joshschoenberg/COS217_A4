@@ -161,6 +161,35 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
          if(!CheckerDT_treeCheck(oNChild, 0))
             return FALSE;
       }
+      if (Path_getDepth(Node_getPath(oNNode)) > 1)
+      {
+         size_t i = 1;
+         Node_T oNParent = Node_getParent(oNNode);
+         while (i < Node_getNumChildren(oNParent))
+         {
+            Node_T iNode = NULL;
+            Node_T iminus1Node = NULL;
+            Node_getChild(oNParent, i, &iNode);
+            Node_getChild(oNParent, i-1, &iminus1Node);
+
+            fprintf(stderr, "%s\n%s\n\n", Path_getPathname(Node_getPath(iNode)), Path_getPathname(Node_getPath(iminus1Node)));
+
+            if (iNode && iminus1Node)
+            {
+               int siblingComparison;
+               siblingComparison = Node_compare(iNode, iminus1Node);
+               if (siblingComparison < 0)
+               {
+                  fprintf(stderr, "Two siblings in incorrect order\n");
+                  return FALSE; 
+               }
+            }
+
+            i++;
+         }
+      }
+      
+
    }
 
    if (ulCount)
