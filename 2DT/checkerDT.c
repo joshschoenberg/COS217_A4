@@ -86,7 +86,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          i++;
       }
    }
-
+/*
    if (ulDepth > 1)
    {
       size_t i = 1;
@@ -113,7 +113,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          i++;
       }
    }
-
+*/
    /* The root node should not contain a backward slash */
    if (ulDepth == 1 && strchr(Path_getPathname(Node_getPath(oNNode)), '/')) {
       fprintf(stderr, "Root node should not contain a backward slash\n");
