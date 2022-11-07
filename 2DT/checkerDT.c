@@ -20,8 +20,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    Path_T oPPPath;
    size_t ulDepth;
    size_t i;
-   size_t childID = 0;
    int numberOfEquivalences;
+   size_t childID = 0;
 
    oPNPath = Node_getPath(oNNode);
    ulDepth = Path_getDepth(oPNPath);
@@ -48,12 +48,12 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* The node's parent should have this child as a child */
-   /* if (oNParent != NULL) {
+   if (oNParent != NULL) {
       if (!Node_hasChild(oNParent, Node_getPath(oNNode), &childID)) {
          fprintf(stderr, "The node's parent does not have it as a child\n");
          return FALSE;
       }
-   } */
+   }
 
    /* The root node should not have a parent */
    if (ulDepth == 1 && oNParent != NULL) {
