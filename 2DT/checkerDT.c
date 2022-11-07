@@ -173,8 +173,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
             Node_getChild(oNParent, i, &iNode);
             Node_getChild(oNParent, i-1, &iminus1Node);
 
-            fprintf(stderr, "%s\n", DT_toString());
-
             if (iNode && iminus1Node)
             {
                int siblingComparison;
@@ -189,6 +187,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
             i++;
          }
       }
+
    }
 
    
@@ -240,6 +239,28 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          fprintf(stderr, "Initialized, but ulcount=0 + oNRoot!=NULL");
       }
    }
+
+
+
+   char * str = DT_toString();
+   char * nextStr = strchr(str, '\n') + 1;
+   while (*nextStr)
+   {
+      int comparison;
+
+      *(nextStr - 1) = '\0';
+      
+      comparison = strcmp(str, nextStr);
+
+      if (comparison < 0)
+      {
+            fprintf(stderr, "ToString not in alphabetical order\n");
+            return FALSE; 
+      }
+      str = nextStr;
+      nextStr = strchr(str, '\n') + 1;
+   }
+   
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(oNRoot, ulCount);
