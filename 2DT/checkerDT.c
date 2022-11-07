@@ -87,8 +87,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       numberOfEquivalences = 0;
       while (i < Node_getNumChildren(oNParent)) {
          Node_getChild(oNParent, i, &oNSibling);
-         /* fprintf(stdout, "Sibling: %s, com with: %s", Path_getPathname(
-            Node_getPath(oNSibling)), Path_getPathname(Node_getPath(oNNode))); */
+         fprintf(stdout, "Sibling: %s, com with: %s", Path_getPathname(
+            Node_getPath(oNSibling)), Path_getPathname(Node_getPath(oNNode))); 
          if (oNSibling != NULL) {
             int siblingComparison;
             siblingComparison = Node_compare(oNNode, oNSibling);
