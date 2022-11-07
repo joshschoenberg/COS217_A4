@@ -83,12 +83,11 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    /* Nodes should be in alphabetical order */
    if (oNParent != NULL) {
       oNParent = Node_getParent(oNNode);
+      Node_hasChild(oNParent, Node_getPath(oNNode), &childID);
       i = 0;
       numberOfEquivalences = 0;
       while (i < Node_getNumChildren(oNParent)) {
          Node_getChild(oNParent, i, &oNSibling);
-         fprintf(stdout, "Sibling: %s, com with: %s", Path_getPathname(
-            Node_getPath(oNSibling)), Path_getPathname(Node_getPath(oNNode))); 
          if (oNSibling != NULL) {
             int siblingComparison;
             siblingComparison = Node_compare(oNNode, oNSibling);
@@ -99,17 +98,15 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
                   return FALSE; 
                }
             }
+
             /* Siblings before this node should be earlier lexicographically */
             else if ( (childID > i) && (siblingComparison < 0) ) {
-               fprintf(stderr, "ChildID: %lu SiblingID: %lu", childID, i);
                fprintf(stderr, "Siblings are not in alphabetical order\n");
                return FALSE;
             }
             /* Siblings after this node should be later lexicographically */
             else if ( (childID < i) && (siblingComparison > 0) ) {
-               fprintf(stderr, "\nChildID: %lu SiblingID: %lu\n", childID, i);
-               fprintf(stderr, "Sibling: %s, com with: %s", Path_getPathname(
-            Node_getPath(oNSibling)), Path_getPathname(Node_getPath(oNNode)));
+               
                fprintf(stderr, "Siblings are not in alphabetical order\n");
                return FALSE;
             }
