@@ -20,7 +20,6 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    size_t ulDepth;
    size_t i;
    int numberOfEquivalences;
-   size_t childID = 0;
 
    oPNPath = Node_getPath(oNNode);
    ulDepth = Path_getDepth(oPNPath);
@@ -176,7 +175,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
             if (iNode && iminus1Node)
             {
                int siblingComparison;
-               siblingComparison = Node_compare(iNode, iminus1Node);
+               siblingComparison = Path_comparePath(Node_getPath(iNode), Node_getPath(iminus1Node));
                if (siblingComparison < 0)
                {
                   fprintf(stderr, "Two siblings in incorrect order\n");
@@ -210,8 +209,6 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
 /* see checkerDT.h for specification */
 boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
                           size_t ulCount) {
-   char * str;
-   char * nextStr;
    /* Sample check on a top-level data structure invariant:
       if the DT is not initialized, its count should be 0. */
    if(!bIsInitialized)
