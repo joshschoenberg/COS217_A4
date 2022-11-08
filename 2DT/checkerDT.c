@@ -240,32 +240,7 @@ boolean CheckerDT_isValid(boolean bIsInitialized, Node_T oNRoot,
          fprintf(stderr, "Initialized, but ulcount=0 + oNRoot!=NULL");
          return FALSE;
       }
-   }
-
-
-   fprintf(stderr, "%s", DT_toString());
-   fflush(stderr);
-   str = DT_toString();
-   nextStr = strchr(str, '\n') + 1;
-   
-   while (*nextStr)
-   {
-      int comparison;
-
-      *(nextStr - 1) = '\0';
-      
-      comparison = strcmp(str, nextStr);
-
-      if (comparison < 0)
-      {
-            fprintf(stderr, "ToString not in alphabetical order\n");
-            return FALSE; 
-      }
-      str = nextStr;
-      nextStr = strchr(str, '\n') + 1;
-   }
-
-   
+   }   
 
    /* Now checks invariants recursively at each node from the root. */
    return CheckerDT_treeCheck(oNRoot, ulCount);
