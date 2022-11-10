@@ -80,7 +80,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
    }
 
    /* Node_compare should return the correct number */ 
-      if (Node_compare)
+   /*   if (Node_compare) */
 
    /* Node cannot have the same name as any of its siblings */
    /* Nodes should be in alphabetical order */
