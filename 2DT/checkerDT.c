@@ -106,7 +106,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
             /* Siblings before this node should be earlier lexicographically */
             else if ( (childID > i) && (siblingComparison < 0) ) {
                fprintf(stderr, "Siblings are not in alphabetical order\n");
-               fprintf(stderr, "%lu%lu", childID, i)
+               fprintf(stderr, "%lu%lu", childID, i);
                return FALSE;
             }
             /* Siblings after this node should be later lexicographically */
