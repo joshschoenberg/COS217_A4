@@ -79,6 +79,9 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
       return FALSE;
    }
 
+   /* Node_compare should return the correct number */ 
+      if (Node_compare)
+
    /* Node cannot have the same name as any of its siblings */
    /* Nodes should be in alphabetical order */
    if (oNParent != NULL) {
@@ -90,7 +93,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          Node_getChild(oNParent, i, &oNSibling);
          if (oNSibling != NULL) {
             int siblingComparison;
-            siblingComparison = Node_compare(oNNode, oNSibling);
+            siblingComparison = strcmp(Path_getPathname(Node_getPath(oNNode)), 
+                              Path_getPathname(Node_getPath(oNSibling)));
             if (!siblingComparison) {
                numberOfEquivalences++;
                if (numberOfEquivalences > 1) {
