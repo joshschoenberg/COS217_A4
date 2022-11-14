@@ -27,6 +27,16 @@ boolean Node_isFile(Node_T oNNode);
 int Node_getContents(Node_T oNNode, void * pvResult);
 
 /*
+   If oNNode is a file, this function replaces it's contents with
+   pvNewContents and ulNewLength, returning the old contents.
+
+   If oNNode is a directory, this function prints an error to STDERR
+   and returns NULL
+*/
+void * Node_replaceContents(Node_T oNNode, void * pvNewContents,
+                              size_t ulNewLength)
+
+/*
   Creates a new dir with path oPPath and parent oNParent.  Returns an
   int SUCCESS status and sets *poNResult to be the new node if
   successful. Otherwise, sets *poNResult to NULL and returns status:

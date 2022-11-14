@@ -3,10 +3,10 @@ GCC = gcc217
 
 .PRECIOUS: %.o
 
-all: $(TARGETS)
+all: ft_client
 
 clean:
-	rm -f $(TARGETS) meminfo*.out
+	rm -f ft_client meminfo*.out
 
 clobber: clean
 	rm -f dynarray.o path.o ft_client.o checkerfT.o nodefTGood.o ftGood.o *~

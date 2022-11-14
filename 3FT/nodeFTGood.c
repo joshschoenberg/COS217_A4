@@ -9,12 +9,15 @@
 #include "dynarray.h"
 #include "nodeFT.h"
 #include "checkerDT.h"
+#include <stdio.h>
 
 /* A node in an FT */
 struct node {
 
    /* this contains the contents of a file node or NULL for a dir */
    void * pvFileContents;
+   /* this contains the length of pvFileContents or 0 for dir */
+   size_t ulContentsLength;
    /* this is true if the node is a file or false if a directory */
    boolean bisFile;
    /* the object corresponding to the node's absolute path */
@@ -47,6 +50,33 @@ int Node_getContents(Node_T oNNode, void * pvResult)
       return SUCCESS;
    }
    return NOT_A_FILE;
+}
+
+/*
+   If oNNode is a file, this function replaces it's contents with
+   pvNewContents and ulNewLength, returning the old contents.
+
+   If oNNode is a directory, this function prints an error to STDERR
+   and returns NULL
+*/
+void * Node_replaceContents(Node_T oNNode, void * pvNewContents,
+                              size_t ulNewLength)
+{
+   assert(oNNode != NULL);
+
+   if (!(oNNode->bisFile))
+   {
+      fprintf(stderr,
+       "Node with path: %s contents cannot replaced. It's not a file",
+       Path_getPathname(Node_getPath(oNNode)));
+      return NULL;
+   }   
+
+   void * ret = oNNode->pvFileContents;
+   oNNode->pvFileContents = pvNewContents;
+   oNNode->pvFileContents = ulNewLength;
+
+   return ret;
 }
 
 /*
@@ -186,6 +216,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
       return MEMORY_ERROR;
    }
    psNew->pvFileContents = NULL;
+   psNew->ulContentsLength = 0;
 
    /* Link into parent's children list */
    if(oNParent != NULL) {
@@ -207,7 +238,8 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
 }
 
 /*
-  Creates a new file with path oPPath and parent oNParent.  Returns an
+  Creates a new file with path oPPath parent oNParent, containing
+  pvContents and content length of ulContentSize. Returns an
   int SUCCESS status and sets *poNResult to be the new node if
   successful. Otherwise, sets *poNResult to NULL and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
@@ -219,7 +251,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
   * NOT_A_DIRECTORY if oNParent is a file
 */
 int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
-                     void * pvContents) {
+                     void * pvContents, size_t ulContentsSize) {
 
    struct node *psNew;
    Path_T oPParentPath = NULL;
@@ -306,6 +338,7 @@ int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
    /* File cannot have children */
    psNew->oDChildren = NULL;
    psNew->pvFileContents = pvContents;
+   psNew->ulContentsLength = ulContentsSize;
 
    /* Link into parent's children list */
    if(oNParent != NULL) {
@@ -352,10 +385,6 @@ size_t Node_free(Node_T oNNode) {
       }
       DynArray_free(oNNode->oDChildren);
    }
-   else
-   {
-      free(oNNode->pvFileContents);
-   }
 
    /* remove path */
    Path_free(oNNode->oPPath);
@@ -382,7 +411,6 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
 
    if (oNParent->bisFile)
    {
-      pulChildID = NULL;
       return FALSE;
    }
    
