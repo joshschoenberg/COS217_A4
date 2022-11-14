@@ -20,6 +20,11 @@ typedef struct node *Node_T;
 boolean Node_isFile(Node_T oNNode);
 
 /*
+   Returns the size of the contents of file oNNode (0 if not a file)
+*/
+size_t Node_getFileSize(Node_T oNNode);
+
+/*
    fills parameter pvResult with the contents of file Node_T onNode
    Returns 
    * NOT_A_FILE if oNNode is a directory, leaving pvResult unchanged
@@ -34,7 +39,7 @@ int Node_getContents(Node_T oNNode, void * pvResult);
    and returns NULL
 */
 void * Node_replaceContents(Node_T oNNode, void * pvNewContents,
-                              size_t ulNewLength)
+                              size_t ulNewLength);
 
 /*
   Creates a new dir with path oPPath and parent oNParent.  Returns an

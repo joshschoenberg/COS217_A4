@@ -38,6 +38,14 @@ boolean Node_isFile(Node_T oNNode)
 }
 
 /*
+   Returns the size of the contents of file oNNode (0 if not a file)
+*/
+size_t Node_getFileSize(Node_T oNNode)
+{
+   return oNNode->ulContentsLength;
+}
+
+/*
    fills parameter pvResult with the contents of file Node_T onNode
    Returns 
    * NOT_A_FILE if oNNode is a directory, leaving pvResult unchanged
