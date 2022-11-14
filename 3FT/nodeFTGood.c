@@ -74,7 +74,7 @@ void * Node_replaceContents(Node_T oNNode, void * pvNewContents,
 
    void * ret = oNNode->pvFileContents;
    oNNode->pvFileContents = pvNewContents;
-   oNNode->pvFileContents = ulNewLength;
+   oNNode->ulContentsLength = ulNewLength;
 
    return ret;
 }
