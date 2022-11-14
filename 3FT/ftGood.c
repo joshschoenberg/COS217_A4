@@ -17,10 +17,11 @@
 
 
 /*
-  A Directory Tree is a representation of a hierarchy of directories,
-  represented as an AO with 3 state variables:
+  A File Tree is a representation of a hierarchy of directories and files,
+  represented as an AO with __ state variables:
 */
-
+/* 1. a flag for being a file (TRUE) or directory (FALSE) */
+static boolean bIsFile;
 /* 1. a flag for being in an initialized state (TRUE) or not (FALSE) */
 static boolean bIsInitialized;
 /* 2. a pointer to the root node in the hierarchy */
@@ -47,7 +48,7 @@ static size_t ulCount;
   * CONFLICTING_PATH if the root's path is not a prefix of oPPath
   * MEMORY_ERROR if memory could not be allocated to complete request
 */
-static int DT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
+static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    int iStatus;
    Path_T oPPrefix = NULL;
    Node_T oNCurr;
@@ -120,7 +121,7 @@ static int DT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
   * NO_SUCH_PATH if no node with pcPath exists in the hierarchy
   * MEMORY_ERROR if memory could not be allocated to complete request
  */
-static int DT_findNode(const char *pcPath, Node_T *poNResult) {
+static int FT_findNode(const char *pcPath, Node_T *poNResult) {
    Path_T oPPath = NULL;
    Node_T oNFound = NULL;
    int iStatus;
@@ -166,7 +167,7 @@ static int DT_findNode(const char *pcPath, Node_T *poNResult) {
 /*--------------------------------------------------------------------*/
 
 
-int DT_insert(const char *pcPath) {
+int FT_insertDir(const char *pcPath) {
    int iStatus;
    Path_T oPPath = NULL;
    Node_T oNFirstNew = NULL;
