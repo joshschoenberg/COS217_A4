@@ -1,1 +1,1 @@
-../0shared/dynarray.c
+#include "../0shared/dynarray.c"

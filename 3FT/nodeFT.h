@@ -15,19 +15,45 @@
 typedef struct node *Node_T;
 
 /*
-  Creates a new node in the Directory Tree, with path oPPath and
-  parent oNParent. Returns an int SUCCESS status and sets *poNResult
-  to be the new node if successful. Otherwise, sets *poNResult to NULL
-  and returns status:
+   Returns whether the node is a file (TRUE) or a directory (FALSE)
+*/
+boolean Node_isFile(Node_T oNNode);
+
+/*
+   fills parameter pvResult with the contents of file Node_T onNode
+   Returns 
+   * NOT_A_FILE if oNNode is a directory, leaving pvResult unchanged
+*/
+int Node_getContents(Node_T oNNode, void * pvResult);
+
+/*
+  Creates a new dir with path oPPath and parent oNParent.  Returns an
+  int SUCCESS status and sets *poNResult to be the new node if
+  successful. Otherwise, sets *poNResult to NULL and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
   * CONFLICTING_PATH if oNParent's path is not an ancestor of oPPath
   * NO_SUCH_PATH if oPPath is of depth 0
                  or oNParent's path is not oPPath's direct parent
                  or oNParent is NULL but oPPath is not of depth 1
   * ALREADY_IN_TREE if oNParent already has a child with this path
+  * NOT_A_DIRECTORY if oNParent is a file
 */
-int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult);
+int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult);
 
+/*
+  Creates a new file with path oPPath and parent oNParent.  Returns an
+  int SUCCESS status and sets *poNResult to be the new node if
+  successful. Otherwise, sets *poNResult to NULL and returns status:
+  * MEMORY_ERROR if memory could not be allocated to complete request
+  * CONFLICTING_PATH if oNParent's path is not an ancestor of oPPath
+  * NO_SUCH_PATH if oPPath is of depth 0
+                 or oNParent's path is not oPPath's direct parent
+                 or oNParent is NULL but oPPath is not of depth 1
+  * ALREADY_IN_TREE if oNParent already has a child with this path
+  * NOT_A_DIRECTORY if oNParent is a file
+*/
+int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
+                     void * pvContents);
 /*
   Destroys and frees all memory allocated for the subtree rooted at
   oNNode, i.e., deletes this node and all its descendents. Returns the
@@ -41,6 +67,8 @@ Path_T Node_getPath(Node_T oNNode);
 /*
   Returns TRUE if oNParent has a child with path oPPath. Returns
   FALSE if it does not.
+
+  If oNParent is a file, then returns FALSE and sets pulChildId to NULL
 
   If oNParent has such a child, stores in *pulChildID the child's
   identifier (as used in Node_getChild). If oNParent does not have
