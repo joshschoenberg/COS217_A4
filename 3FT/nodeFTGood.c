@@ -269,12 +269,6 @@ int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
    assert(oPPath != NULL);
    assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
 
-   /* File cannot be the root */
-   if (Path_getDepth(psNew->oPPath) == 1)
-   {
-      return CONFLICTING_PATH;
-   }
-
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
    if(psNew == NULL) {
@@ -290,6 +284,12 @@ int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
       return iStatus;
    }
    psNew->oPPath = oPNewPath;
+
+   /* File cannot be the root */
+   if (Path_getDepth(psNew->oPPath) == 1)
+   {
+      return CONFLICTING_PATH;
+   }
 
    /* validate and set the new node's parent */
    if(oNParent != NULL) {
