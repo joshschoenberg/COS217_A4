@@ -53,7 +53,8 @@ void * Node_replaceContents(Node_T oNNode, void * pvNewContents,
 int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult);
 
 /*
-  Creates a new file with path oPPath and parent oNParent.  Returns an
+  Creates a new file with path oPPath parent oNParent, containing
+  pvContents and content length of ulContentSize. Returns an
   int SUCCESS status and sets *poNResult to be the new node if
   successful. Otherwise, sets *poNResult to NULL and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
@@ -65,7 +66,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult);
   * NOT_A_DIRECTORY if oNParent is a file
 */
 int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
-                     void * pvContents);
+                     void * pvContents, size_t ulContentsSize);
 /*
   Destroys and frees all memory allocated for the subtree rooted at
   oNNode, i.e., deletes this node and all its descendents. Returns the
