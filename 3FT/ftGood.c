@@ -11,9 +11,9 @@
 
 #include "dynarray.h"
 #include "path.h"
-#include "nodeDT.h"
-#include "checkerDT.h"
-#include "dt.h"
+#include "nodeFT.h"
+#include "checkerFT.h"
+#include "ft.h"
 
 
 /*
@@ -459,7 +459,7 @@ void *FT_getFileContents(const char *pcPath) {
    pvContents = Node_getContents(oNNode);
 
    /* NEEDED? assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount)) */
-   
+
    return pvContents;
 }
 
