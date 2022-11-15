@@ -200,7 +200,7 @@ int FT_insertDir(const char *pcPath) {
    }
 
    /* The ancestor found is a file */
-   if (Node_isFile(oNCurr)) {
+   if (oNCurr != NULL && Node_isFile(oNCurr)) {
       Path_free(oPPath);
       return NOT_A_DIRECTORY;
    }
