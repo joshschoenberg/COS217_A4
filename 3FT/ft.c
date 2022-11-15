@@ -49,7 +49,7 @@ static int FT_traversePath(Path_T oPPath, Node_T *poNFurthest) {
    Node_T oNChild = NULL;
    size_t ulDepth;
    size_t i;
-   size_t ulChildID;
+   size_t ulChildID = 0;
 
    assert(oPPath != NULL);
    assert(poNFurthest != NULL);
@@ -558,18 +558,20 @@ int FT_destroy(void) {
   inserting each payload to DynArray_T oDynArray beginning at index ulIndex.
   Returns the next unused index in oDynArray after the insertion(s).
 */
-static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T oDynArray, size_t ulIndex) {
-   size_t c;
+static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T oDynArray, 
+                                                       size_t ulIndex) {
+   size_t ulIterator;
 
    assert(oDynArray != NULL);
 
    if(oNRoot != NULL) {
       (void) DynArray_set(oDynArray, ulIndex, oNRoot);
       ulIndex++;
-      for(c = 0; c < Node_getNumChildren(oNRoot); c++) {
+      for(ulIterator = 0; ulIterator < Node_getNumChildren(oNRoot); 
+                                                         ulIterator++) {
          int iStatus;
          Node_T oNChild = NULL;
-         iStatus = Node_getChild(oNRoot,c, &oNChild);
+         iStatus = Node_getChild(oNRoot, ulIterator, &oNChild);
          assert(iStatus == SUCCESS);
          ulIndex = FT_preOrderTraversal(oNChild, oDynArray, ulIndex);
       }
