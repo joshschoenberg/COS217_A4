@@ -437,6 +437,9 @@ int FT_rmFile(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
+   if (!Node_isFile(oNFound))
+      return NOT_A_FILE;
+
    ulCount -= Node_free(oNFound);
    if(ulCount == 0)
       oNRoot = NULL;
