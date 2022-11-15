@@ -1,7 +1,7 @@
-/*--------------------------------------------------------------------*/
-/* ft.c                                                               */
-/* Authors: Jack Toubes and Josh Schoenberg                           */
-/*--------------------------------------------------------------------*/
+/*
+  A File Tree is a representation of a hierarchy of directories and files,
+  represented as an AO with __ state variables:
+*/
 
 #include <stddef.h>
 #include <assert.h>
@@ -16,10 +16,6 @@
 #include "ft.h"
 
 
-/*
-  A File Tree is a representation of a hierarchy of directories and files,
-  represented as an AO with __ state variables:
-*/
 /* 1. a flag for being in an initialized state (TRUE) or not (FALSE) */
 static boolean bIsInitialized;
 /* 2. a pointer to the root node in the hierarchy */
@@ -498,9 +494,11 @@ void *FT_replaceFileContents(const char *pcPath, void *pvNewContents,
 int FT_stat(const char *pcPath, boolean *pbIsFile, size_t *pulSize) {
    int iStatus;
    Node_T oNNode = NULL;
-
-   assert(pcPath != NULL);
    
+   assert(pcPath != NULL);
+   assert(pbIsFile != NULL);
+   assert(pulSize != NULL);
+
    iStatus = FT_findNode(pcPath, &oNNode);
    
    if (iStatus != SUCCESS)

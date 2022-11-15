@@ -1,7 +1,6 @@
-/*--------------------------------------------------------------------*/
-/* nodeDT.h                                                           */
-/* Author: Christopher Moretti                                        */
-/*--------------------------------------------------------------------*/
+/*
+  A Node in an FT, either a file or a directory
+*/
 
 #ifndef NODE_INCLUDED
 #define NODE_INCLUDED
@@ -15,7 +14,7 @@
 typedef struct node *Node_T;
 
 /*
-   Returns whether the node is a file (TRUE) or a directory (FALSE)
+   Returns whether oNNode is a file (TRUE) or a directory (FALSE)
 */
 boolean Node_isFile(Node_T oNNode);
 
@@ -54,7 +53,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult);
 
 /*
   Creates a new file with path oPPath parent oNParent, containing
-  pvContents and content length of ulContentSize. Returns an
+  pvContents and content length of ulContentsSize. Returns an
   int SUCCESS status and sets *poNResult to be the new node if
   successful. Otherwise, sets *poNResult to NULL and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
@@ -66,7 +65,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult);
   * NOT_A_DIRECTORY if oNParent is a file
 */
 int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
-                     void * pvContents, size_t ulContentsSize);
+                     void *pvContents, size_t ulContentsSize);
 /*
   Destroys and frees all memory allocated for the subtree rooted at
   oNNode, i.e., deletes this node and all its descendents. Returns the
