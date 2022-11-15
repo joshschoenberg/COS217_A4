@@ -1,16 +1,12 @@
-/*--------------------------------------------------------------------*/
-/* ft.h                                                               */
-/* Author: Christopher Moretti and Vikash Modi '23                    */
-/*--------------------------------------------------------------------*/
-
-#ifndef FT_INCLUDED
-#define FT_INCLUDED
-
 /*
   A File Tree is a representation of a hierarchy of directories and
   files: the File Tree is rooted at a directory, directories
   may be internal nodes or leaves, and files are always leaves.
 */
+
+#ifndef FT_INCLUDED
+#define FT_INCLUDED
+
 
 #include <stddef.h>
 #include "a4def.h"

@@ -1,7 +1,4 @@
-/*--------------------------------------------------------------------*/
-/* nodeFT.c                                                           */
-/* Author: Christopher Moretti                                        */
-/*--------------------------------------------------------------------*/
+/* A node in an FT */
 
 #include <stdlib.h>
 #include <assert.h>
@@ -11,7 +8,6 @@
 #include "checkerFT.h"
 #include <stdio.h>
 
-/* A node in an FT */
 struct node {
 
    /* this contains the contents of a file node or NULL for a dir */
@@ -138,7 +134,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
    size_t ulParentDepth;
-   size_t ulIndex;
+   size_t ulIndex = 0;
    int iStatus;
 
    assert(oPPath != NULL);
@@ -263,7 +259,7 @@ int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
    size_t ulParentDepth;
-   size_t ulIndex;
+   size_t ulIndex = 0;
    int iStatus;
 
    assert(oPPath != NULL);
