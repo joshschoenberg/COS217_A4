@@ -25,11 +25,9 @@ boolean Node_isFile(Node_T oNNode);
 size_t Node_getFileSize(Node_T oNNode);
 
 /*
-   fills parameter pvResult with the contents of file Node_T onNode
-   Returns 
-   * NOT_A_FILE if oNNode is a directory, leaving pvResult unchanged
+   Returns File contents for a file oNNode, or null for a directory
 */
-int Node_getContents(Node_T oNNode, void * pvResult);
+void * Node_getContents(Node_T oNNode);
 
 /*
    If oNNode is a file, this function replaces it's contents with
