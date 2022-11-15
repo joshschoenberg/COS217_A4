@@ -159,12 +159,17 @@ What are your critiques of the given DT implementations, as
 specified in Step 2.5?
 1. In nodeDTGood.c, in the Node_getPath() function, the function returns 
       a pointer to the actual path object, oPPath. This means that it is 
-      possible 
+      possible to free that object, thus ruining the Node unbeknownst to
+      to the tree/node.
 2. DT_toString() in dtGood.c calls DynArray_new(), but it does not deal 
       with a situation where DynArray_new() returns NULL because it 
       cannot allocate the memory.
-3. Node_hasChild() is a very confusing function. It 
+3. Node_hasChild() is a very confusing function. We reccomend
+      considering splitting it up into a function Node_contains() and a
+      function Node_getChildIndex() in order to improve the clarity of
+      the module for others reading it.
 4. In DT_preorderTraversal(), the parameters should follow naming conventions: 
-      oNRoot, oDynArray, and ulIndex. 
+      oNRoot, oDynArray, and ulIndex. In addition, size_t c should be 
+      renamed to follow conventions (e.g. ulIterator).
  
 ------------------------------------------------------------------------
