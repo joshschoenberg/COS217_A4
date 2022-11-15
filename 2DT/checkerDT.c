@@ -86,31 +86,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
          i++;
       }
    }
-/*
-   if (ulDepth > 1)
-   {
-      size_t i = 1;
-      while (i < Node_getNumChildren(oNParent))
-      {
-         Node_T iNode = NULL;
-         Node_T iminus1Node = NULL;
-         Node_getChild(oNParent, i, &iNode);
-         Node_getChild(oNParent, i-1, &iminus1Node);
-         fprintf(stderr, "%s\n%s\n\n", Path_getPathname(Node_getPath(iNode)), Path_getPathname(Node_getPath(iminus1Node)));
-         if (iNode && iminus1Node)
-         {
-            int siblingComparison;
-            siblingComparison = Node_compare(iNode, iminus1Node);
-            if (siblingComparison < 0)
-            {
-               fprintf(stderr, "Two siblings in incorrect order\n");
-               return FALSE; 
-            }
-         }
-         i++;
-      }
-   }
-*/
+   
    /* The root node should not contain a backward slash */
    if (ulDepth == 1 && strchr(Path_getPathname(Node_getPath(oNNode)), '/')) {
       fprintf(stderr, "Root node should not contain a backward slash\n");
