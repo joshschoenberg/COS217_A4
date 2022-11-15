@@ -7,21 +7,47 @@
 #include <assert.h>
 #include <string.h>
 #include "dynarray.h"
-#include "nodeDT.h"
+#include "nodeFT.h"
 #include "checkerDT.h"
 
-/* A node in a DT */
+/* A node in an FT */
 struct node {
+
+   /* this contains the contents of a file node or NULL for a dir */
+   void * pvFileContents;
+   /* this is true if the node is a file or false if a directory */
+   boolean bisFile;
    /* the object corresponding to the node's absolute path */
    Path_T oPPath;
    /* this node's parent */
    Node_T oNParent;
    /* the object containing links to this node's children */
+   /* must be NULL if a file */
    DynArray_T oDChildren;
 };
 
+/*
+   Returns whether the node is a file (TRUE) or a directory (FALSE)
+*/
+boolean Node_isFile(Node_T oNNode)
+{
+   return oNNode->bisFile;
+}
 
-
+/*
+   fills parameter pvResult with the contents of file Node_T onNode
+   Returns 
+   * NOT_A_FILE if oNNode is a directory, leaving pvResult unchanged
+*/
+int Node_getContents(Node_T oNNode, void * pvResult)
+{
+   if (oNNode->bisFile)
+   {
+      pvResult = oNNode->pvFileContents;
+      return SUCCESS;
+   }
+   return NOT_A_FILE;
+}
 
 /*
   Links new child oNChild into oNParent's children array at index
@@ -32,6 +58,12 @@ static int Node_addChild(Node_T oNParent, Node_T oNChild,
                          size_t ulIndex) {
    assert(oNParent != NULL);
    assert(oNChild != NULL);
+
+   if (oNParent->bisFile)
+   {
+      return NOT_A_DIRECTORY;
+   }
+   
 
    if(DynArray_addAt(oNParent->oDChildren, ulIndex, oNChild))
       return SUCCESS;
@@ -55,7 +87,7 @@ static int Node_compareString(const Node_T oNFirst,
 
 
 /*
-  Creates a new node with path oPPath and parent oNParent.  Returns an
+  Creates a new dir with path oPPath and parent oNParent.  Returns an
   int SUCCESS status and sets *poNResult to be the new node if
   successful. Otherwise, sets *poNResult to NULL and returns status:
   * MEMORY_ERROR if memory could not be allocated to complete request
@@ -64,8 +96,9 @@ static int Node_compareString(const Node_T oNFirst,
                  or oNParent's path is not oPPath's direct parent
                  or oNParent is NULL but oPPath is not of depth 1
   * ALREADY_IN_TREE if oNParent already has a child with this path
+  * NOT_A_DIRECTORY if oNParent is a file
 */
-int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
+int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
    struct node *psNew;
    Path_T oPParentPath = NULL;
    Path_T oPNewPath = NULL;
@@ -108,6 +141,14 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
          return CONFLICTING_PATH;
       }
 
+      /* parent must be a directory */
+      if(oNParent->bisFile) {
+         Path_free(psNew->oPPath);
+         free(psNew);
+         *poNResult = NULL;
+         return NOT_A_DIRECTORY;
+      }
+
       /* parent must be exactly one level up from child */
       if(Path_getDepth(psNew->oPPath) != ulParentDepth + 1) {
          Path_free(psNew->oPPath);
@@ -144,6 +185,127 @@ int Node_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
       *poNResult = NULL;
       return MEMORY_ERROR;
    }
+   psNew->pvFileContents = NULL;
+
+   /* Link into parent's children list */
+   if(oNParent != NULL) {
+      iStatus = Node_addChild(oNParent, psNew, ulIndex);
+      if(iStatus != SUCCESS) {
+         Path_free(psNew->oPPath);
+         free(psNew);
+         *poNResult = NULL;
+         return iStatus;
+      }
+   }
+
+   *poNResult = psNew;
+
+   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+   assert(CheckerDT_Node_isValid(*poNResult));
+
+   return SUCCESS;
+}
+
+/*
+  Creates a new file with path oPPath and parent oNParent.  Returns an
+  int SUCCESS status and sets *poNResult to be the new node if
+  successful. Otherwise, sets *poNResult to NULL and returns status:
+  * MEMORY_ERROR if memory could not be allocated to complete request
+  * CONFLICTING_PATH if oNParent's path is not an ancestor of oPPath
+  * NO_SUCH_PATH if oPPath is of depth 0
+                 or oNParent's path is not oPPath's direct parent
+                 or oNParent is NULL but oPPath is not of depth 1
+  * ALREADY_IN_TREE if oNParent already has a child with this path
+  * NOT_A_DIRECTORY if oNParent is a file
+*/
+int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
+                     void * pvContents) {
+
+   struct node *psNew;
+   Path_T oPParentPath = NULL;
+   Path_T oPNewPath = NULL;
+   size_t ulParentDepth;
+   size_t ulIndex;
+   int iStatus;
+
+   assert(oPPath != NULL);
+   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+
+   /* File cannot be the root */
+   if (Path_getDepth(psNew->oPPath) == 1)
+   {
+      return CONFLICTING_PATH;
+   }
+
+   /* allocate space for a new node */
+   psNew = malloc(sizeof(struct node));
+   if(psNew == NULL) {
+      *poNResult = NULL;
+      return MEMORY_ERROR;
+   }
+
+   /* set the new node's path */
+   iStatus = Path_dup(oPPath, &oPNewPath);
+   if(iStatus != SUCCESS) {
+      free(psNew);
+      *poNResult = NULL;
+      return iStatus;
+   }
+   psNew->oPPath = oPNewPath;
+
+   /* validate and set the new node's parent */
+   if(oNParent != NULL) {
+      size_t ulSharedDepth;
+
+      oPParentPath = oNParent->oPPath;
+      ulParentDepth = Path_getDepth(oPParentPath);
+      ulSharedDepth = Path_getSharedPrefixDepth(psNew->oPPath,
+                                                oPParentPath);
+      /* parent must be an ancestor of child */
+      if(ulSharedDepth < ulParentDepth) {
+         Path_free(psNew->oPPath);
+         free(psNew);
+         *poNResult = NULL;
+         return CONFLICTING_PATH;
+      }
+
+      /* parent must be a directory */
+      if(oNParent->bisFile) {
+         Path_free(psNew->oPPath);
+         free(psNew);
+         *poNResult = NULL;
+         return NOT_A_DIRECTORY;
+      }
+
+      /* parent must be exactly one level up from child */
+      if(Path_getDepth(psNew->oPPath) != ulParentDepth + 1) {
+         Path_free(psNew->oPPath);
+         free(psNew);
+         *poNResult = NULL;
+         return NO_SUCH_PATH;
+      }
+
+      /* parent must not already have child with this path */
+      if(Node_hasChild(oNParent, oPPath, &ulIndex)) {
+         Path_free(psNew->oPPath);
+         free(psNew);
+         *poNResult = NULL;
+         return ALREADY_IN_TREE;
+      }
+   }
+   else {
+      /* new file cannot be root */
+      Path_free(psNew->oPPath);
+      free(psNew);
+      *poNResult = NULL;
+      return NO_SUCH_PATH;
+   }
+   psNew->oNParent = oNParent;
+
+   /* initialize the new node */
+   /* File cannot have children */
+   psNew->oDChildren = NULL;
+   psNew->pvFileContents = pvContents;
 
    /* Link into parent's children list */
    if(oNParent != NULL) {
@@ -183,10 +345,17 @@ size_t Node_free(Node_T oNNode) {
    }
 
    /* recursively remove children */
-   while(DynArray_getLength(oNNode->oDChildren) != 0) {
-      ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
+   if (!(oNNode->bisFile))
+   {  
+      while(DynArray_getLength(oNNode->oDChildren) != 0) {
+         ulCount += Node_free(DynArray_get(oNNode->oDChildren, 0));
+      }
+      DynArray_free(oNNode->oDChildren);
    }
-   DynArray_free(oNNode->oDChildren);
+   else
+   {
+      free(oNNode->pvFileContents);
+   }
 
    /* remove path */
    Path_free(oNNode->oPPath);
@@ -209,6 +378,15 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
 
+   // assert(!(oNParent->bisFile));
+
+   if (oNParent->bisFile)
+   {
+      pulChildID = NULL;
+      return FALSE;
+   }
+   
+
    /* *pulChildID is the index into oNParent->oDChildren */
    return DynArray_bsearch(oNParent->oDChildren,
             (char*) Path_getPathname(oPPath), pulChildID,
@@ -218,14 +396,25 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
 size_t Node_getNumChildren(Node_T oNParent) {
    assert(oNParent != NULL);
 
+   if (oNParent->bisFile)
+   {
+      return 0;
+   }
+
    return DynArray_getLength(oNParent->oDChildren);
 }
 
-int  Node_getChild(Node_T oNParent, size_t ulChildID,
+int Node_getChild(Node_T oNParent, size_t ulChildID,
                    Node_T *poNResult) {
 
    assert(oNParent != NULL);
    assert(poNResult != NULL);
+
+   if(oNParent->bisFile)
+   {
+      poNResult = NULL;
+      return NOT_A_DIRECTORY;
+   }
 
    /* ulChildID is the index into oNParent->oDChildren */
    if(ulChildID >= Node_getNumChildren(oNParent)) {
