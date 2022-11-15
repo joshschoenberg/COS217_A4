@@ -1,5 +1,5 @@
-#GCC = gcc217
-GCC = gcc217m
+GCC = gcc217
+#GCC = gcc217m
 
 .PRECIOUS: %.o
 
