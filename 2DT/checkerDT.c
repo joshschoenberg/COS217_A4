@@ -95,6 +95,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
             int siblingComparison;
             siblingComparison = strcmp(Path_getPathname(Node_getPath(oNNode)), 
                               Path_getPathname(Node_getPath(oNSibling)));
+            /* Two siblings should not have the same name */
             if (!siblingComparison) {
                numberOfEquivalences++;
                if (numberOfEquivalences > 1) {

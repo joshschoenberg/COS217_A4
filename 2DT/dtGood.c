@@ -386,8 +386,9 @@ char *DT_toString(void) {
 
    if(!bIsInitialized)
       return NULL;
-
+   /* THIS SHOULD DEAL WITH A SITUATION WHERE DynArray_new() RETURNS NULL */
    nodes = DynArray_new(ulCount);
+
    (void) DT_preOrderTraversal(oNRoot, nodes, 0);
 
    DynArray_map(nodes, (void (*)(void *, void*)) DT_strlenAccumulate,

@@ -16,8 +16,19 @@ complete the assignment? COPY THE LIST of authorized sources of
 information given in the "Policies" web page (also available on armlab
 in the file ~cos217/AuthorizedSourcesList ) to this section of the
 readme file, and edit it as appropriate.
+The course's lectures.
 
+The course's precepts.
 
+The course's website.
+
+Documents that are referenced directly by the course's website. Such documents include the course's lecture slides and precept handouts.
+
+The man pages on the armlab cluster.
+
+The course's current staff members outside of class time through office hours.
+
+The course's current staff members outside of class time through Ed.
 
 ------------------------------------------------------------------------
 Student 2: What authorized sources of information did you use to
@@ -25,7 +36,17 @@ complete the assignment? COPY THE LIST of authorized sources of
 information given in the "Policies" web page (also available on armlab
 in the file ~cos217/AuthorizedSourcesList ) to this section of the
 readme file, and edit it as appropriate.
+The course's lectures.
 
+The course's precepts.
+
+The course's website.
+
+Documents that are referenced directly by the course's website. Such documents include the course's lecture slides and precept handouts.
+
+The man pages on the armlab cluster.
+
+The course's current staff members outside of class time through Ed.
 
 
 ------------------------------------------------------------------------
@@ -39,7 +60,7 @@ unauthorized source may trigger a course penalty, and depending on the
 nature of the interaction, may additionally require the interaction
 being reported to the Committee on Discipline. Write "None" if you used
 no unauthorized sources of information.
-
+None.
 
 
 ------------------------------------------------------------------------
@@ -53,20 +74,23 @@ unauthorized source may trigger a course penalty, and depending on the
 nature of the interaction, may additionally require the interaction
 being reported to the Committee on Discipline. Write "None" if you used
 no unauthorized sources of information.
-
-
+None.
 
 ------------------------------------------------------------------------
 Student 1: What is your assessment of the assignment? Was it helpful?
 Was it fun?
-
+I found it very helpful for understaning how to read large portions of 
+code. 
 
 
 ------------------------------------------------------------------------
 Student 2: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-
+I found part 2 of this assignment to be vague and ambiguous in
+terms of it's exectations. I found part 1 to be a good excersize in 
+debugging, and part 3 a good simulation of a real SE task (ie receiving
+a codebase and adding features).
 
 ------------------------------------------------------------------------
 (optional) What information can you provide about your submission that
@@ -80,7 +104,6 @@ What warnings does splint generate for Part 2's checker, and what are
 your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
-
 
 
 ------------------------------------------------------------------------
@@ -97,7 +120,8 @@ your disagreements with them? Copy the splint warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-
+It generates errors for 5 functions in nodeFT.c/h which it says aren't
+used outside of nodeFT.c; it is wrong about this, they are used in ft.c
 
 ------------------------------------------------------------------------
 What warnings does critTer generate on your Part 3 code, and what are
@@ -105,7 +129,7 @@ your disagreements with them? Copy the critTer warnings here, and
 express your disagreement after each warning. If there are no
 warnings, then write "None."
 
-
+Aside from the errors we were told we could ignore, there are none.
 
 ------------------------------------------------------------------------
 For each of the five faulty BDT implementations required by Step
@@ -133,7 +157,14 @@ the error manifests itself or is "noticed" by the client.
 ------------------------------------------------------------------------
 What are your critiques of the given DT implementations, as
 specified in Step 2.5?
-
-
-
+1. In nodeDTGood.c, in the Node_getPath() function, the function returns 
+      a pointer to the actual path object, oPPath. This means that it is 
+      possible 
+2. DT_toString() in dtGood.c calls DynArray_new(), but it does not deal 
+      with a situation where DynArray_new() returns NULL because it 
+      cannot allocate the memory.
+3. Node_hasChild() is a very confusing function. It 
+4. In DT_preorderTraversal(), the parameters should follow naming conventions: 
+      oNRoot, oDynArray, and ulIndex. 
+ 
 ------------------------------------------------------------------------
