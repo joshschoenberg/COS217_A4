@@ -67,6 +67,8 @@ void * Node_getContents(Node_T oNNode)
 void * Node_replaceContents(Node_T oNNode, void * pvNewContents,
                               size_t ulNewLength)
 {
+   void * ret = oNNode->pvFileContents;
+
    assert(oNNode != NULL);
 
    if (!(oNNode->bisFile))
@@ -76,8 +78,7 @@ void * Node_replaceContents(Node_T oNNode, void * pvNewContents,
        Path_getPathname(Node_getPath(oNNode)));
       return NULL;
    }   
-
-   void * ret = oNNode->pvFileContents;
+   
    oNNode->pvFileContents = pvNewContents;
    oNNode->ulContentsLength = ulNewLength;
 
@@ -412,7 +413,7 @@ boolean Node_hasChild(Node_T oNParent, Path_T oPPath,
    assert(oPPath != NULL);
    assert(pulChildID != NULL);
 
-   // assert(!(oNParent->bisFile));
+   /* assert(!(oNParent->bisFile)); */
 
    if (oNParent->bisFile)
    {
