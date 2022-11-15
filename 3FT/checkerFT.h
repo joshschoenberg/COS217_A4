@@ -13,7 +13,7 @@
    Returns TRUE if oNNode represents a directory entry
    in a valid state, or FALSE otherwise.
 */
-boolean CheckerDT_Node_isValid(Node_T oNNode);
+boolean CheckerFT_Node_isValid(Node_T oNNode);
 
 /*
    Returns TRUE if the hierarchy is in a valid state or FALSE
@@ -23,7 +23,7 @@ boolean CheckerDT_Node_isValid(Node_T oNNode);
    a size_t ulCount representing the total number of directories in
    the hierarchy.
 */
-boolean CheckerDT_isValid(boolean bIsInitialized,
+boolean CheckerFT_isValid(boolean bIsInitialized,
                           Node_T oNRoot,
                           size_t ulCount);
 

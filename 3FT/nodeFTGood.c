@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------*/
-/* nodeDT.c                                                           */
+/* nodeFT.c                                                           */
 /* Author: Christopher Moretti                                        */
 /*--------------------------------------------------------------------*/
 
@@ -8,7 +8,7 @@
 #include <string.h>
 #include "dynarray.h"
 #include "nodeFT.h"
-#include "checkerDT.h"
+#include "checkerFT.h"
 
 /* A node in an FT */
 struct node {
@@ -107,7 +107,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
    int iStatus;
 
    assert(oPPath != NULL);
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+   assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
 
    /* allocate space for a new node */
    psNew = malloc(sizeof(struct node));
@@ -200,8 +200,8 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
 
    *poNResult = psNew;
 
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
-   assert(CheckerDT_Node_isValid(*poNResult));
+   assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
+   assert(CheckerFT_Node_isValid(*poNResult));
 
    return SUCCESS;
 }
@@ -229,7 +229,7 @@ int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
    int iStatus;
 
    assert(oPPath != NULL);
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
+   assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
 
    /* File cannot be the root */
    if (Path_getDepth(psNew->oPPath) == 1)
@@ -320,8 +320,8 @@ int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
 
    *poNResult = psNew;
 
-   assert(oNParent == NULL || CheckerDT_Node_isValid(oNParent));
-   assert(CheckerDT_Node_isValid(*poNResult));
+   assert(oNParent == NULL || CheckerFT_Node_isValid(oNParent));
+   assert(CheckerFT_Node_isValid(*poNResult));
 
    return SUCCESS;
 }
@@ -331,7 +331,7 @@ size_t Node_free(Node_T oNNode) {
    size_t ulCount = 0;
 
    assert(oNNode != NULL);
-   assert(CheckerDT_Node_isValid(oNNode));
+   assert(CheckerFT_Node_isValid(oNNode));
 
    /* remove from parent's list */
    if(oNNode->oNParent != NULL) {
