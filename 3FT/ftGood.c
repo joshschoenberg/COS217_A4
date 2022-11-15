@@ -291,6 +291,9 @@ int FT_rmDir(const char *pcPath) {
    if(iStatus != SUCCESS)
        return iStatus;
 
+   if (Node_isFile(oNFound))
+      return NOT_A_DIRECTORY;
+
    ulCount -= Node_free(oNFound);
    if(ulCount == 0)
       oNRoot = NULL;
@@ -378,7 +381,7 @@ int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength) {
                                                 pvContents, ulLength);
       }
       else {
-         iStatus = Node_dir_new(oPPrefix, oNCurr, &oNNewNode); 
+         iStatus = Node_dir_new(oPPrefix, oNCurr, &oNNewNode);
       }
       if(iStatus != SUCCESS) {
          Path_free(oPPath);
