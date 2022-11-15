@@ -453,13 +453,13 @@ void *FT_getFileContents(const char *pcPath) {
    if (iStatus != SUCCESS) 
       return NULL;
    
-   iStatus = Node_getContents(oNNode, pvContents);
-
-   if (iStatus != SUCCESS) 
+   if (!Node_isFile(oNNode))
       return NULL;
 
-   /* NEEDED? assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount)) */
+   pvContents = Node_getContents(oNNode);
 
+   /* NEEDED? assert(CheckerFT_isValid(bIsInitialized, oNRoot, ulCount)) */
+   
    return pvContents;
 }
 
