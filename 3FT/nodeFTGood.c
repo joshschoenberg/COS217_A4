@@ -223,6 +223,7 @@ int Node_dir_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult) {
    }
    psNew->pvFileContents = NULL;
    psNew->ulContentsLength = 0;
+   psNew->bisFile = FALSE;
 
    /* Link into parent's children list */
    if(oNParent != NULL) {
@@ -345,6 +346,7 @@ int Node_file_new(Path_T oPPath, Node_T oNParent, Node_T *poNResult,
    psNew->oDChildren = NULL;
    psNew->pvFileContents = pvContents;
    psNew->ulContentsLength = ulContentsSize;
+   psNew->bisFile = TRUE;
 
    /* Link into parent's children list */
    if(oNParent != NULL) {
