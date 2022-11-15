@@ -9,9 +9,9 @@ clean:
 	rm -f ft_client meminfo*.out
 
 clobber: clean
-	rm -f dynarray.o path.o ft_client.o checkerfT.o nodefTGood.o ftGood.o *~
+	rm -f dynarray.o path.o ft_client.o checkerFT.o nodeFTGood.o ftGood.o *~
 
-ft_client: dynarray.o path.o checkerfT.o nodefT.o ft.o ft_client.o
+ft_client: dynarray.o path.o checkerFT.o nodeFT.o ft.o ft_client.o
 	$(GCC) -g $^ -o $@
 
 dynarray.o: dynarray.c dynarray.h
