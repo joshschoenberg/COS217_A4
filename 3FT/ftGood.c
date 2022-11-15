@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------*/
-/* dt.c                                                               */
+/* ftGood.c                                                               */
 /* Author: Christopher Moretti                                        */
 /*--------------------------------------------------------------------*/
 
@@ -372,8 +372,9 @@ int FT_insertFile(const char *pcPath, void *pvContents, size_t ulLength) {
       /* insert the new node for this level */
       /* if this is the file, create a new file node. Otherwise,
          create a new directory node */
-      if (ulIndex = ulDepth) {
-         iStatus = Node_file_new(oPPrefix, oNCurr, &oNNewNode);
+      if (ulIndex == ulDepth) {
+         iStatus = Node_file_new(oPPrefix, oNCurr, &oNNewNode, 
+                                                pvContents, ulLength);
       }
       else {
          iStatus = Node_dir_new(oPPrefix, oNCurr, &oNNewNode); 
@@ -544,7 +545,7 @@ int FT_destroy(void) {
 /* --------------------------------------------------------------------
 
   The following auxiliary functions are used for generating the
-  string representation of the DT.
+  string representation of the FT.
 */
 
 /*
@@ -610,7 +611,7 @@ char *FT_toString(void) {
    if (nodes == NULL)
       return NULL;
 
-   (void) DT_preOrderTraversal(oNRoot, nodes, 0);
+   (void) FT_preOrderTraversal(oNRoot, nodes, 0);
 
    DynArray_map(nodes, (void (*)(void *, void*)) FT_strlenAccumulate,
                 (void*) &totalStrlen);
