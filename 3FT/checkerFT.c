@@ -131,6 +131,28 @@ boolean CheckerFT_Node_isValid(Node_T oNNode) {
       return FALSE;
    }
    
+   if (!Node_isFile(oNNode))
+   {
+      if(Node_getContents(oNNode) != NULL)
+      {
+         fprintf(stderr, "Directory had file like contents");
+         return FALSE;
+      }
+      if(Node_getFileSize(oNNode))
+      {
+         fprintf(stderr, "Directory had nonzero file size");
+         return FALSE;
+      }
+   }
+   else
+   {
+      if(Node_getNumChildren(oNNode))
+      {
+         fprintf(stderr, "File had nonzero number of children");
+         return FALSE;
+      }
+   }
+
    return TRUE;
 }
 
