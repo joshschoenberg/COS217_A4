@@ -99,6 +99,8 @@ boolean CheckerDT_Node_isValid(Node_T oNNode) {
 
 /*
    Performs a pre-order traversal of the tree rooted at oNNode.
+   param ulCount is the current size of the tree, or 0 if this is not 
+   being called by the root.
    Returns FALSE if a broken invariant is found and
    returns TRUE otherwise.
    You may want to change this function's return type or
@@ -144,10 +146,12 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
             Node_getChild(oNParent, i, &iNode);
             Node_getChild(oNParent, i-1, &iminus1Node);
 
+            /* Checks for siblings being in lexicographic order */
             if (iNode && iminus1Node)
             {
                int siblingComparison;
-               siblingComparison = Path_comparePath(Node_getPath(iNode), Node_getPath(iminus1Node));
+               siblingComparison = Path_comparePath(Node_getPath(iNode), 
+                                             Node_getPath(iminus1Node));
                if (siblingComparison < 0)
                {
                   fprintf(stderr, "Two siblings in incorrect order\n");
@@ -161,8 +165,7 @@ static boolean CheckerDT_treeCheck(Node_T oNNode, size_t ulCount) {
 
    }
 
-   
-
+   /* Confirms that tree is the size it says it is */
    if (ulCount)
    {
       if (checkerCount != ulCount)
