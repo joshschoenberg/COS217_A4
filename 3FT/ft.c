@@ -568,12 +568,26 @@ static size_t FT_preOrderTraversal(Node_T oNRoot, DynArray_T oDynArray,
       (void) DynArray_set(oDynArray, ulIndex, oNRoot);
       ulIndex++;
       for(ulIterator = 0; ulIterator < Node_getNumChildren(oNRoot); 
-                                                         ulIterator++) {
+                                                         ulIterator++) {                                                  
          int iStatus;
          Node_T oNChild = NULL;
          iStatus = Node_getChild(oNRoot, ulIterator, &oNChild);
-         assert(iStatus == SUCCESS);
-         ulIndex = FT_preOrderTraversal(oNChild, oDynArray, ulIndex);
+         if(Node_isFile(oNChild))
+         {
+            assert(iStatus == SUCCESS);
+            ulIndex = FT_preOrderTraversal(oNChild, oDynArray, ulIndex);
+         }
+      }
+      for(ulIterator = 0; ulIterator < Node_getNumChildren(oNRoot); 
+                                                         ulIterator++) {                                                  
+         int iStatus;
+         Node_T oNChild = NULL;
+         iStatus = Node_getChild(oNRoot, ulIterator, &oNChild);
+         if(!Node_isFile(oNChild))
+         {
+            assert(iStatus == SUCCESS);
+            ulIndex = FT_preOrderTraversal(oNChild, oDynArray, ulIndex);
+         }
       }
    }
    return ulIndex;
